@@ -22,7 +22,6 @@ const BASIC_URL = 'https://api.thecatapi.com/v1/images/search';
 
 const refs = {
   selectionEl: document.querySelector('.breed-select'),
-  errorEl: document.querySelector('.error'),
   loaderEl: document.querySelector('.loader'),
   catInfoEl: document.querySelector('.cat-info'),
 };
@@ -49,21 +48,19 @@ export function fetchCatByBreed(breedId) {
       if (!response.ok) {
         throw new Error(response.status);
       }
-      refs.loaderEl.classList.add('hidden');
       return response.json();
     })
     .then(arr => (refs.catInfoEl.innerHTML = createCatImg(arr)))
     .catch(err => {
-      refs.loaderEl.classList.add('hidden');
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
     });
 }
 
 function createCatImg(breed) {
+    Loading.remove();
   if (breed.length === 0) {
     throw new Error();
   }
-  Loading.remove();
   return breed
     .map(item => {
       const {
